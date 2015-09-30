@@ -1,0 +1,16 @@
+﻿//Script GUID:bf3f8252-660f-4055-ba4f-23b0d940b248
+//Used for tracking history
+
+EXTRACT userid, logintime:DateTime
+FROM "log.txt"
+USING DefaultTextExtractor("-d",",");
+
+REDUCE
+ON userid
+USING SessionIdGenerator
+PRESORT logintime
+PRODUCE userid,
+        logintime, sessionId;
+
+OUTPUT
+TO "result.txt";
